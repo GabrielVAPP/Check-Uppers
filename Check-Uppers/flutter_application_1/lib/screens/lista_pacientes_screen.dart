@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../models/paciente.dart';
 import '../data/pacientes_repository.dart';
 import 'editar_paciente_screen.dart';
+import 'registrar_paciente_screen.dart';
 
 class ListaPacientesScreen extends StatefulWidget {
   const ListaPacientesScreen({super.key});
@@ -87,7 +88,7 @@ class _ListaPacientesScreenState extends State<ListaPacientesScreen> {
                                 ),
                               );
 
-                              setState(() {});
+                              setState(() {}); // atualiza ao voltar
                             },
                             child: const Text("Editar"),
                           ),
@@ -98,14 +99,21 @@ class _ListaPacientesScreenState extends State<ListaPacientesScreen> {
                 );
               },
             ),
+
+      // ➕ BOTÃO DE ADICIONAR PACIENTE (AGORA CORRETO)
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.add),
         onPressed: () async {
-          final novoPaciente =
-              await Navigator.pushNamed(context, "/registrarPaciente");
+          final novoPaciente = await Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => const RegistrarPacienteScreen(),
+            ),
+          );
 
+          // RegistrarPacienteScreen já adiciona o paciente automaticamente.
+          // Aqui só atualizamos a tela.
           if (novoPaciente is Paciente) {
-            PacientesRepository.adicionar(novoPaciente);
             setState(() {});
           }
         },

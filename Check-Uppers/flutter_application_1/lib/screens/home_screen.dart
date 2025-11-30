@@ -3,8 +3,27 @@ import '../data/pacientes_repository.dart';
 import 'lista_pacientes_screen.dart';
 import 'gerenciar_pacientes_screen.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  List pacientes = [];
+
+  @override
+  void initState() {
+    super.initState();
+    carregarDados();
+  }
+
+  void carregarDados() {
+    setState(() {
+      pacientes = PacientesRepository.pacientes;
+    });
+  }
 
   int calcularIdade(DateTime nascimento) {
     final hoje = DateTime.now();
@@ -20,10 +39,7 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final pacientes = PacientesRepository.pacientes;
     final total = pacientes.length;
-
-    // Exibir no máximo 3 pacientes
     final listaCompacta = pacientes.take(3).toList();
 
     return Scaffold(
@@ -84,19 +100,20 @@ class HomeScreen extends StatelessWidget {
 
               return Card(
                 child: ListTile(
-                  leading: CircleAvatar(
+                  leading: const CircleAvatar(
                     child: Icon(Icons.person),
                   ),
                   title: Text(paciente.nome),
-                  subtitle: Text("Idade: $idade  |  Gênero: ${paciente.genero}"),
-                  trailing: Icon(Icons.arrow_forward_ios, size: 16),
+                  subtitle:
+                      Text("Idade: $idade  |  Gênero: ${paciente.genero}"),
+                  trailing: const Icon(Icons.arrow_forward_ios, size: 16),
                   onTap: () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
                         builder: (_) => const ListaPacientesScreen(),
                       ),
-                    );
+                    ).then((_) => carregarDados());
                   },
                 ),
               );
@@ -114,7 +131,7 @@ class HomeScreen extends StatelessWidget {
                   MaterialPageRoute(
                     builder: (_) => const ListaPacientesScreen(),
                   ),
-                );
+                ).then((_) => carregarDados());
               },
             ),
 
@@ -129,7 +146,7 @@ class HomeScreen extends StatelessWidget {
                   MaterialPageRoute(
                     builder: (_) => const GerenciarPacientesScreen(),
                   ),
-                );
+                ).then((_) => carregarDados());
               },
             ),
           ],
