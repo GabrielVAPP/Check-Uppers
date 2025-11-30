@@ -4,6 +4,7 @@ class Paciente {
   String genero;
   DateTime inicioTratamento;
   DateTime? fimTratamento;
+
   String? anotacoes;
 
   Paciente({
@@ -15,28 +16,33 @@ class Paciente {
     this.anotacoes,
   });
 
-  // ---------- JSON ----------
-
-  Map<String, dynamic> toJson() {
-    return {
-      'nome': nome,
-      'dataNascimento': dataNascimento.toIso8601String(),
-      'genero': genero,
-      'inicioTratamento': inicioTratamento.toIso8601String(),
-      'fimTratamento': fimTratamento?.toIso8601String(),
-      'anotacoes': anotacoes,
-    };
-  }
-
+  // -----------------------------
+  // 🔥 Converter JSON → Paciente
+  // -----------------------------
   factory Paciente.fromJson(Map<String, dynamic> json) {
     return Paciente(
-      nome: json['nome'],
-      dataNascimento: DateTime.parse(json['dataNascimento']),
-      genero: json['genero'],
-      inicioTratamento: DateTime.parse(json['inicioTratamento']),
-      fimTratamento:
-          json['fimTratamento'] != null ? DateTime.parse(json['fimTratamento']) : null,
-      anotacoes: json['anotacoes'],
+      nome: json["nome"],
+      dataNascimento: DateTime.parse(json["dataNascimento"]),
+      genero: json["genero"],
+      inicioTratamento: DateTime.parse(json["inicioTratamento"]),
+      fimTratamento: json["fimTratamento"] != null && json["fimTratamento"] != ""
+          ? DateTime.parse(json["fimTratamento"])
+          : null,
+      anotacoes: json["anotacoes"],
     );
+  }
+
+  // -----------------------------
+  // 🔥 Converter Paciente → JSON
+  // -----------------------------
+  Map<String, dynamic> toJson() {
+    return {
+      "nome": nome,
+      "dataNascimento": dataNascimento.toIso8601String(),
+      "genero": genero,
+      "inicioTratamento": inicioTratamento.toIso8601String(),
+      "fimTratamento": fimTratamento?.toIso8601String(),
+      "anotacoes": anotacoes,
+    };
   }
 }
