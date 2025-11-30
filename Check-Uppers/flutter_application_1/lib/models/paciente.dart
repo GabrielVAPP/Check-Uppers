@@ -8,7 +8,7 @@ class Paciente {
   DateTime? fimTratamento;
   String? anotacoes;
 
-  List<Remedio> remedios; // NOVO
+  List<Remedio> remedios;
 
   Paciente({
     required this.nome,
@@ -17,10 +17,9 @@ class Paciente {
     required this.inicioTratamento,
     this.fimTratamento,
     this.anotacoes,
-    this.remedios = const [], // Inicializa vazio
-  });
+    List<Remedio>? remedios,
+  }) : remedios = remedios ?? [];
 
-  // JSON
   Map<String, dynamic> toJson() {
     return {
       'nome': nome,
@@ -29,7 +28,7 @@ class Paciente {
       'inicioTratamento': inicioTratamento.toIso8601String(),
       'fimTratamento': fimTratamento?.toIso8601String(),
       'anotacoes': anotacoes,
-      'remedios': remedios.map((r) => r.toJson()).toList(), // NOVO
+      'remedios': remedios.map((r) => r.toJson()).toList(),
     };
   }
 
@@ -43,11 +42,7 @@ class Paciente {
           ? DateTime.parse(json['fimTratamento'])
           : null,
       anotacoes: json['anotacoes'],
-      remedios: json['remedios'] != null
-          ? (json['remedios'] as List)
-              .map((r) => Remedio.fromJson(r))
-              .toList()
-          : [],
+      remedios: (json['remedios'] as List?)?.map((r) => Remedio.fromJson(r)).toList() ?? [],
     );
   }
 }
